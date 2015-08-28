@@ -1,0 +1,43 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+
+  .ChessBlocks {
+            float: left;
+            width: 50px;
+            height: 50px;
+            font-size: 50px;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+            background-repeat: no-repeat;
+            position: relative; 
+        }
+
+
+
+
+.btn_plyr 
+{
+width:100px;
+height:30px;
+background-color:#5e6bd1;
+color:#fff;
+font-style:italic; 
+font-weight: 800;
+}
+
+
+
+.btn_plyr.plyr1
+{
+position:absolute;
+bottom:1%;
+left:47%;
+}

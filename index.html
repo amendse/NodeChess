@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alpha 4 Player Chess</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  <!--  <script src="jquery-1.11.2.min.js" type="text/javascript"></script>-->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="socket.io-1.2.0.js" type="text/javascript"></script>
+    <script src="jquery-1.11.1.js" type="text/javascript"></script>
+    <script src="jquery-ui.min.js" type="text/javascript"></script>
+   <!-- <script src="jquery.ui.touch-punch.js" type="text/javascript"></script>-->
+     <script src="Chess_Design.js" type="text/javascript"></script>
+    <script src="jquery.rotate.js" type="text/javascript"></script>
+    
+  
+ 
+    <style>
+
+   .textox {
+   width: 55%;
+   margin-top:13px;
+   margin-left:2px;
+   height: 20px;
+   border: solid 2px #697878;
+   padding: 20px;
+   border-radius: 5px;
+   font-size: 12px;
+   box-shadow: 0px 1px 2px 0px #9C9C9C;
+   background-color: #FFFFFF;
+   outline: none;
+   color: #474747;
+  }
+.textox:hover  {
+   border: 2px solid #22C9C9;
+  }
+.textox:focus  {
+   border: solid 2px #00D43C;
+   box-shadow: inset 0px 1px 2px 0px #9C9C9C;
+  }
+.textox:active  {
+   border: solid 2px #0043EB;
+  }
+
+	#container{
+                width:301px;
+                height:400px;
+                
+                /*overflow: auto;*/
+            }
+            ::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+            }
+            ::-webkit-scrollbar-button:start:decrement,
+            ::-webkit-scrollbar-button:end:increment  {
+                display: none;
+            }
+             
+            ::-webkit-scrollbar-track-piece  {
+                background-color: #3b3b3b;
+                -webkit-border-radius: 6px;
+            }
+             
+            ::-webkit-scrollbar-thumb:vertical {
+                -webkit-border-radius: 6px;
+                background: #666 url(scrollbar_thumb_bg.png) no-repeat center;
+            }
+             
+        .chat {
+    width:530px;
+    overflow: auto; height:400px;
+    position:absolute;top:0.3%;
+    margin:5px auto;
+    border: 1px rgb(89,89,89) solid;
+    background: rgba(33, 12, 12, 0.65);
+    opacity:0.5;
+    
+               /*width: 125%;
+height: 880%;
+
+border: 1px rgb(89,89,89) solid;
+
+background: rgba(33, 12, 12, 0.65);*/
+            /*width: 200px;
+            border-radius: 5px;*/
+        }
+
+        .bubble {
+            background-color: #F2F2F2;
+            border-radius: 5px;
+            box-shadow: 0 0 6px #B2B2B2;
+            display: inline-block;
+            padding: 10px 18px;
+            position: relative;
+            vertical-align: top;
+        }
+
+        .bubble::before {
+                background-color: #F2F2F2;
+                content: "\00a0";
+                display: block;
+                height: 16px;
+                position: absolute;
+                top: 11px;
+                transform: rotate( 29deg ) skew( -35deg );
+                -moz-transform: rotate( 29deg ) skew( -35deg );
+                -ms-transform: rotate( 29deg ) skew( -35deg );
+                -o-transform: rotate( 29deg ) skew( -35deg );
+                -webkit-transform: rotate( 29deg ) skew( -35deg );
+                width: 20px;
+            }
+
+        .me {
+ 
+            float: left;
+            margin: 5px 45px 5px 20px;
+        }
+
+            .me::before {
+                box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
+                left: -9px;
+            }
+
+        .you {
+          /*     min-height:24px;
+    padding:6px;
+    border:1px solid #FFFFFF;
+    max-width:200px;
+    padding:8px 6px 4px 37px;
+    position:relative;
+    margin:0 10px 10px 0;*/
+            float: right;
+            margin: 5px 20px 5px 45px;
+        }
+
+            .you::before {
+                box-shadow: 2px -2px 2px 0 rgba( 178, 178, 178, .4 );
+                right: -9px;
+            }
+    </style>
+    <style>
+        .css_button {
+            font-size: 16px;
+            font-family: Arial;
+            font-weight: normal;
+            text-decoration: inherit;
+            -webkit-border-radius: 8px 8px 8px 8px;
+            -moz-border-radius: 8px 8px 8px 8px;
+            border-radius: 8px 8px 8px 8px;
+            border: 1px solid #469df5;
+            padding: 9px 18px;
+            text-shadow: 1px 1px 0px #287ace;
+            -webkit-box-shadow: inset 1px 1px 0px 0px #cae3fc;
+            -moz-box-shadow: inset 1px 1px 0px 0px #cae3fc;
+            box-shadow: inset 1px 1px 0px 0px #cae3fc;
+            cursor: pointer;
+            color: #ffffff;
+            display: inline-block;
+            background: -webkit-linear-gradient(90deg, #4197ee 5%, #79bbff 100%);
+            background: -moz-linear-gradient(90deg, #4197ee 5%, #79bbff 100%);
+            background: -ms-linear-gradient(90deg, #4197ee 5%, #79bbff 100%);
+            background: linear-gradient(180deg, #79bbff 5%, #4197ee 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#79bbff",endColorstr="#4197ee");
+          /*   margin:1px 10px 5px 5px;*/
+         
+        }
+
+            .css_button:hover {
+                background: -webkit-linear-gradient(90deg, #79bbff 5%, #4197ee 100%);
+                background: -moz-linear-gradient(90deg, #79bbff 5%, #4197ee 100%);
+                background: -ms-linear-gradient(90deg, #79bbff 5%, #4197ee 100%);
+                background: linear-gradient(180deg, #4197ee 5%, #79bbff 100%);
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#4197ee",endColorstr="#79bbff");
+            }
+
+            .css_button:active {
+                position: relative;
+                top: 1px;
+            }
+    </style>
+ 
+    <style>
+
+     @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300);
+
+.pie {
+    width: 100px;
+    height: 100px;
+    display: block;
+    position: relative;
+    float: left;
+    border-radius: 50%;
+    background-color: #00b5e8;
+    border: 2px solid #00b5e8;
+    margin: 2em;
+}
+.pie .block {
+
+  background: #fff;
+  width: 80px;
+  height: 80px;
+  display: block;
+  border-radius: 50%;
+  position: relative;
+  top: 10px;
+  left: 10px;
+}
+
+#time {
+  font-size: 3em;
+  position: absolute;
+  top: 26%;  
+  left: 37%;
+  color: #999999;
+}
+
+.degree {
+  /*90 + ( 360 * .1 )*/
+  background-image: linear-gradient(90deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%);
+}
+
+ </style>
+
+</head>
+<body>
+
+    <script type="text/javascript">
+    $(function () {
+        window.setInterval(function () {
+           $('#msg').toggleClass('blink');
+        }, 500);
+    });
+
+    </script>
+
+    <style type="text/css">
+        span {
+            color:red;
+            font-size:large;
+            transition: color 200ms ease;
+        }
+
+            span.blink {
+                color: transparent;
+            }
+    </style>
+
+	<script>
+
+    var socket = io.connect();
+    var gamestarted = 0;
+	var activeplayer = "";
+	var wpValid = false;
+	var chkforrefresh;
+	var moveFrom;
+	var finaldn = 0;
+	var data = ''; var piecepicked = ''; var whichplayer = ''; var pickpiecefrom = ''; var placepieceat = ''; var elementType = ''; var pickedPieceRow = ''; var pickedPieceColumn = '';
+	var DropPieceRow = ''; var DropPieceColumn = ''; var dropPlayer = ''; var moveTowards = ''; var dropat = ''; var chkelement = '';
+	var plyrchng = 0;
+	var frm, to;
+	var gmstrt = 0;
+	var activeplayer = '';
+
+	var wthdrawsteps = {
+	    pieces: []
+	};
+
+	var AllImgs_inTable = {
+	    pieces: []
+	};
+
+	socket.on('connect', function () {
+	     socket.emit('adduser', 'ChsBoard1');
+ 
+	     chkforrefresh = 'set';
+
+	     if (chkforrefresh != 'set') {
+	         sessionStorage.thisscreenuser = '';
+	     }
+
+	     
+	});
+
+	socket.on('updatesession', function (username) {
+	    //alert('updatesession');
+	    sessionStorage.thisscreenuser = '';
+	});
+
+	function p1strt() {
+
+	    if (typeof sessionStorage.thisscreenuser == "undefined" || sessionStorage.thisscreenuser == null || sessionStorage.thisscreenuser == '') {
+	        sessionStorage.thisscreenuser = 'Player1';
+	    }
+
+	    var str = "Player1";
+	    socket.emit('Player1Shw', str);
+	    gamestarted = false;
+	    return false;
+    }
+
+	function p2strt() {
+
+	    if (typeof sessionStorage.thisscreenuser == "undefined" || sessionStorage.thisscreenuser == null || sessionStorage.thisscreenuser == '') {
+	        sessionStorage.thisscreenuser = 'Player2';
+	    }
+
+	    var str = "Player2";
+	    socket.emit('Player2Shw', str);
+	    gamestarted = false;
+
+	    return false;
+	}
+
+	function p3strt() {
+
+	    if (typeof sessionStorage.thisscreenuser == "undefined" || sessionStorage.thisscreenuser == null || sessionStorage.thisscreenuser == '') {
+	        sessionStorage.thisscreenuser = 'Player3';
+	    }
+
+	    var str = "Player3";
+	    socket.emit('Player3Shw', str);
+	    gamestarted = false;
+	    return false;
+
+	}
+
+	function p4strt() {
+
+	    if (typeof sessionStorage.thisscreenuser == "undefined" || sessionStorage.thisscreenuser == null || sessionStorage.thisscreenuser == '') {
+	        sessionStorage.thisscreenuser = 'Player4';
+	    }
+
+	    var str = "Player4";
+	    socket.emit('Player4Shw', str);
+	    gamestarted = 1;
+	   
+	    return false;
+	}
+
+	function resetbtn() {
+	    //alert('resetbtn');
+	    sessionStorage.thisscreenuser = '';
+	    var str = "Reset";
+	    socket.emit('rst', str);	  
+	    gamestarted = 0;
+	    rstbtn();
+	    return false;
+	}
+
+	function undobtn()
+	{
+          socket.emit('record data', sessionStorage.thisscreenuser);
+	 
+	}
+
+	function drgproperty() {
+
+
+	   // $(".imgClass").draggable();
+
+	    $(".imgClass").each(function () {
+	        var imgsrc = this.id;
+	        if (imgsrc.substring(0, 1) == 'w') {
+	            $('#' + imgsrc).attr('draggable', 'true');
+	            $('#' + imgsrc).attr('ondragstart', 'drag(event)');
+	        }
+	        else if (imgsrc.substring(0, 1) == 'g') {
+	            $('#' + imgsrc).attr('draggable', 'true');
+	            $('#' + imgsrc).attr('ondragstart', 'drag(event)');
+	        }
+	        else if (imgsrc.substring(0, 1) == 'b') {
+	            $('#' + imgsrc).attr('draggable', 'true');
+	            $('#' + imgsrc).attr('ondragstart', 'drag(event)');
+	        }
+	        else if (imgsrc.substring(0, 1) == 'r') {
+	            $('#' + imgsrc).attr('draggable', 'true');
+	            $('#' + imgsrc).attr('ondragstart', 'drag(event)');
+	        }
+	    });
+
+
+	}
+
+	socket.on('updateboard', function (username, stringjson, gamstarted, plyr) {
+	  //   alert('UP');
+	    document.getElementById('msg').innerHTML = '';
+	    gmstrt = gamstarted;
+	    gamestarted = gamstarted;
+	 //   alert("gamestarted : " + gamestarted);
+
+	    activeplayer = plyr;
+	    var gngfrm = 'updateboard';
+	
+	    showbrd(username, stringjson, gngfrm);
+
+	    if (gamestarted == 1) {
+	     //   alert('Game started from upbrd');
+	        blinker(activeplayer);
+	    }
+	    else {
+	        stopBlinking();
+	    }
+
+
+
+	    //////blinker(activeplayer);
+	    drgproperty();
+
+	    //switch (sessionStorage.thisscreenuser) {
+	    //    case 'Player1': break;
+	    //    case 'Player2':
+	    //        $("#ChessBoard").rotate({
+	    //            speed: 500,
+	    //            degrees: -90
+	    //        });
+
+	    //        $(".imgClass").rotate({
+	    //            speed: 500,
+	    //            degrees: 90
+	    //        });
+
+	    //        break;
+	    //    case 'Player3':
+	    //        $("#ChessBoard").rotate({
+	    //            speed: 500,
+	    //            degrees: -180
+	    //        });
+
+	    //        $(".imgClass").rotate({
+	    //            speed: 500,
+	    //            degrees: 180
+	    //        });
+
+	    //        break;
+	    //    case 'Player4':
+	    //        $("#ChessBoard").rotate({
+	    //            speed: 500,
+	    //            degrees: -270
+	    //        });
+
+	    //        $(".imgClass").rotate({
+	    //            speed: 500,
+	    //            degrees: 270
+	    //        });
+
+	    //        break;
+
+	    //}
+	    
+	    //alert(sessionStorage.thisscreenuser);
+	    switch (sessionStorage.thisscreenuser) {
+	        case 'Player1': break;
+	        case 'Player2':
+	           // alert(sessionStorage.thisscreenuser);
+	            var rotateCSS = "rotate(" + '-90' + "deg)";
+	            $('#ChessBoard').css({
+	                '-moz-transform': rotateCSS,
+	                '-webkit-transform': rotateCSS,
+	                '-ms-transform': rotateCSS,
+	                '-o-transform': rotateCSS
+	            });
+
+	            var rotateCSS1 = "rotate(" + '90' + "deg)";
+	            $('.imgClass').css({
+
+	                'transform': rotateCSS1,
+	                '-moz-transform': rotateCSS1,
+	                '-webkit-transform': rotateCSS1,
+	                '-ms-transform': rotateCSS1,
+	                '-o-transform': rotateCSS1
+	            });
+	            break;
+	        case 'Player3':
+	            var rotateCSS = "rotate(" + '-180' + "deg)";
+	            $('#ChessBoard').css({
+	                '-moz-transform': rotateCSS,
+	                '-webkit-transform': rotateCSS,
+	                '-ms-transform': rotateCSS,
+	                '-o-transform': rotateCSS
+	            });
+
+	            var rotateCSS1 = "rotate(" + '180' + "deg)";
+	            $('.imgClass').css({
+	                'transform': rotateCSS1,
+	                '-moz-transform': rotateCSS1,
+	                '-webkit-transform': rotateCSS1,
+	                '-ms-transform': rotateCSS1,
+	                '-o-transform': rotateCSS1
+	            });
+
+	            break;
+	        case 'Player4':
+	            var rotateCSS = "rotate(" + '-270' + "deg)";
+	            $('#ChessBoard').css({
+	                '-moz-transform': rotateCSS,
+	                '-webkit-transform': rotateCSS,
+	                '-ms-transform': rotateCSS,
+	                '-o-transform': rotateCSS
+	            });
+
+	            var rotateCSS1 = "rotate(" + '270' + "deg)";
+	            $('.imgClass').css({
+	                'transform': rotateCSS1,
+	                '-moz-transform': rotateCSS1,
+	                '-webkit-transform': rotateCSS1,
+	                '-ms-transform': rotateCSS1,
+	                '-o-transform': rotateCSS1
+	            });
+	            break;
+	    }
+
+
+
+	    return false;
+	});
+
+	socket.on('updatedeadelem1', function (stringjson1) {
+	    shwdeadele(stringjson1);
+	});
+
+	socket.on('dngrbrd', function (dngrstts) {
+	    if (finaldn == 0) {
+	        document.getElementById('msg').innerHTML = dngrstts;
+	    }
+
+	    
+	});
+
+
+	socket.on('updateboard5', function (gamstarted, plyr) {
+	  
+	    gmstrt = gamstarted;
+	    gamestarted = gamstarted;
+	    activeplayer = plyr;
+
+	    //var gngfrm = 'updateboard1';
+
+	    //showbrd(username, stringjson, gngfrm);
+	    if (gamestarted == 1) {
+	    //    alert('Game started from updateboard5');
+	        blinker(activeplayer);
+	    }
+	    else {
+	        stopBlinking();
+	    }
+
+      //  drgproperty();
+
+
+	});
+
+
+	socket.on('updateboard1', function (username, stringjson, gamstarted, plyr, stts) {
+	    
+	    if (stts == "true") {
+	        document.getElementById('msg').innerHTML = '';
+	    }
+	    else if (stts == "false") {
+	        document.getElementById('msg').innerHTML = 'Invalid Move';
+	    }
+	    else {
+
+	        if (stts.indexOf(" Congratulations..!!!! ") >= 0) {
+	           // alert('Win msg' + stts);
+	            document.getElementById('msg').innerHTML = stts;
+	            finaldn = 1;
+	        }
+	        else {
+	            document.getElementById('msg').innerHTML = stts;
+	        }
+	       // shwdeadele(stringjson1, klldelement);
+	    }
+	    
+	    gmstrt = gamstarted;
+	    gamestarted = gamstarted;
+	    activeplayer = plyr;
+	    var gngfrm = 'updateboard1';
+
+	    showbrd(username, stringjson, gngfrm);
+	    if (gamestarted == 1) {
+	         blinker(activeplayer);
+	    }
+	    else {
+	        stopBlinking();
+	    }
+     drgproperty();
+	   
+	    switch (sessionStorage.thisscreenuser) {
+	        case 'Player1': break;
+	        case 'Player2':
+	            var rotateCSS = "rotate(" + '-90' + "deg)";
+	            $('#ChessBoard').css({
+	                '-moz-transform': rotateCSS,
+	                '-webkit-transform': rotateCSS,
+	                '-ms-transform': rotateCSS,
+	                '-o-transform': rotateCSS
+	            });
+
+	            var rotateCSS1 = "rotate(" + '90' + "deg)";
+	            $('.imgClass').css({
+	               
+	                'transform': rotateCSS1,
+	                '-moz-transform': rotateCSS1,
+	                '-webkit-transform': rotateCSS1,
+	                '-ms-transform': rotateCSS1,
+	                '-o-transform': rotateCSS1
+	            });
+	            break;
+            case 'Player3':
+                var rotateCSS = "rotate(" + '-180' + "deg)";
+                $('#ChessBoard').css({
+                    '-moz-transform': rotateCSS,
+                    '-webkit-transform': rotateCSS,
+                    '-ms-transform': rotateCSS,
+                    '-o-transform': rotateCSS
+                });
+
+                var rotateCSS1 = "rotate(" + '180' + "deg)";
+                $('.imgClass').css({
+                    'transform': rotateCSS1,
+                    '-moz-transform': rotateCSS1,
+                    '-webkit-transform': rotateCSS1,
+                    '-ms-transform': rotateCSS1,
+                    '-o-transform': rotateCSS1
+                });
+
+	            break;
+	        case 'Player4':
+	            var rotateCSS = "rotate(" + '-270' + "deg)";
+	            $('#ChessBoard').css({
+	                '-moz-transform': rotateCSS,
+	                '-webkit-transform': rotateCSS,
+	                '-ms-transform': rotateCSS,
+	                '-o-transform': rotateCSS
+	            });
+
+	            var rotateCSS1 = "rotate(" + '270' + "deg)";
+	            $('.imgClass').css({
+	                'transform': rotateCSS1,
+	                '-moz-transform': rotateCSS1,
+	                '-webkit-transform': rotateCSS1,
+	                '-ms-transform': rotateCSS1,
+	                '-o-transform': rotateCSS1
+	            });
+                break;
+	    }
+         
+
+        AllImgs_inTable = {
+            pieces: []
+        };
+
+        $('.imgClass').each(function () {
+            var ar = this.id;
+
+            AllImgs_inTable.pieces.push({
+                "imgids": ar,
+                "parentid": $("#" + ar).parent().attr("id"),
+                "whchplyr" : ar.substring(0,1)
+            });
+
+
+          
+           // console.log(ar);
+        });
+
+        if (finaldn == 0) {
+            var string1 = JSON.stringify(AllImgs_inTable);
+            socket.emit('dangerzone', string1);
+        }
+      
+       
+   //     alert("string1 : " + string1 + "string1 length : " + divimges.length);
+
+	    //for (var i = 0; i < divimges.length; i++) {
+	    //    socket.emit('highlightMoves', $(this).parent().attr('id'), $(this).attr('id'));
+        //}
+      
+        return false;
+
+	});
+ 
+	function allowDrop(ev) {
+	    ev.preventDefault();
+	}
+
+	function drag(ev) {
+	    if (gamestarted == 1) {
+	        player = (ev.target.id).substring(0, 1);
+	        if (activeplayer == player) {
+
+	            switch (player) {
+
+	                case 'w':
+	                    ev.dataTransfer.setData("text", ev.target.id);
+	                    break;
+	                case 'g':
+	                    ev.dataTransfer.setData("text", ev.target.id);
+	                    switch (sessionStorage.thisscreenuser) {
+	                        case 'Player1': break;
+	                        case 'Player2':
+	                            var rotateCSS = "rotate(" + '-90' + "deg)";
+	                            $('#ChessBoard').css({
+	                                '-moz-transform': rotateCSS,
+	                                '-webkit-transform': rotateCSS,
+	                                '-ms-transform': rotateCSS,
+	                                '-o-transform': rotateCSS
+	                            });
+
+	                            var rotateCSS1 = "rotate(" + '90' + "deg)";
+	                            $('.imgClass').css({
+
+	                                '-webkit-transform': rotateCSS1,
+	                                '-moz-transform': rotateCSS1,
+	                                '-ms-transform': rotateCSS1,
+	                                'transform': rotateCSS1
+
+
+	                                //'-webkit-transform': translateY(rotateCSS1)
+	                                //'transform': rotateCSS1,
+	                                //'-moz-transform': rotateCSS1,
+	                                //'-webkit-transform': rotateCSS1,
+	                                //'-ms-transform': rotateCSS1,
+	                                //'-o-transform': rotateCSS1
+	                            });
+	                            break;
+	                        case 'Player3':
+	                            var rotateCSS = "rotate(" + '-180' + "deg)";
+	                            $('#ChessBoard').css({
+	                                '-moz-transform': rotateCSS,
+	                                '-webkit-transform': rotateCSS,
+	                                '-ms-transform': rotateCSS,
+	                                '-o-transform': rotateCSS
+	                            });
+
+	                            var rotateCSS1 = "rotate(" + '180' + "deg)";
+	                            $('.imgClass').css({
+	                                'transform': rotateCSS1,
+	                                '-moz-transform': rotateCSS1,
+	                                '-webkit-transform': rotateCSS1,
+	                                '-ms-transform': rotateCSS1,
+	                                '-o-transform': rotateCSS1
+	                            });
+
+	                            break;
+	                        case 'Player4':
+	                            var rotateCSS = "rotate(" + '-270' + "deg)";
+	                            $('#ChessBoard').css({
+	                                '-moz-transform': rotateCSS,
+	                                '-webkit-transform': rotateCSS,
+	                                '-ms-transform': rotateCSS,
+	                                '-o-transform': rotateCSS
+	                            });
+
+	                            var rotateCSS1 = "rotate(" + '270' + "deg)";
+	                            $('.imgClass').css({
+	                                'transform': rotateCSS1,
+	                                '-moz-transform': rotateCSS1,
+	                                '-webkit-transform': rotateCSS1,
+	                                '-ms-transform': rotateCSS1,
+	                                '-o-transform': rotateCSS1
+	                            });
+	                            break;
+	                    }
+	                    break;
+	                case 'b':
+	                    ev.dataTransfer.setData("text", ev.target.id);
+	                    break;
+	                case 'r':
+	                    ev.dataTransfer.setData("text", ev.target.id);
+	                    break;
+	            }
+	        }
+	    }
+	    else {
+	        alert("Please Start the game to play...");
+	    }
+
+	}
+	   
+	function drop(ev) {
+	    ev.preventDefault();
+	    dropPlayer = '';
+	    dropPlayerfullnm = '';
+	    data = ev.dataTransfer.getData("text");
+	    
+	    piecepicked = data.substring(1, 2);
+	    whichplayer = data.substring(0, 1);
+	    pickpiecefrom = $("#" + data).parent().attr("id");
+	    placepieceat = ev.target.id;
+        elementType = $("#" + placepieceat).prop('tagName');
+	    pickedPieceRow = pickpiecefrom.substring(1, pickpiecefrom.length);
+	    pickedPieceColumn = pickpiecefrom.substring(0, 1);
+	    moveTowards = "";
+
+	
+	    if (elementType == 'TD') {
+	        DropPieceRow = placepieceat.substring(1, placepieceat.length);
+	        DropPieceColumn = placepieceat.substring(0, 1);
+	        dropat = DropPieceColumn + DropPieceRow;
+	    }
+	    else if (elementType == "IMG") {
+	        dropPlayer = placepieceat.substring(0, 1);
+	        dropPlayerfullnm = placepieceat;
+	        placepieceat = $("#" + placepieceat).parent().attr("id");
+	        DropPieceRow = placepieceat.substring(1, placepieceat.length);
+	        DropPieceColumn = placepieceat.substring(0, 1);
+
+	    }
+	    else if (elementType == "DIV") {
+	        
+	        placepieceat = placepieceat.substring(1, placepieceat.length);
+	        DropPieceRow = placepieceat.substring(1, placepieceat.length);
+	        DropPieceColumn = placepieceat.substring(0, 1);
+	        dropat = DropPieceColumn + DropPieceRow;
+	        dropPlayer = $("#" + placepieceat).children().attr("id").substring(0, 1);
+	        dropPlayerfullnm = $("#" + placepieceat).children().attr("id");
+	   
+	    }
+
+	    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+	    var data1 = {};
+	    data1.data = data;
+	    data1.DropPieceRow = DropPieceRow;
+	    data1.DropPieceColumn = DropPieceColumn;
+	    data1.dropPlayer = dropPlayer;
+	    data1.dropPlayerfullnm = dropPlayerfullnm;
+	    data1.piecepicked = piecepicked;
+	    data1.whichplayer = whichplayer;
+	    data1.pickpiecefrom = pickpiecefrom;
+	    data1.placepieceat = $("#" + placepieceat).parent().attr("id");;
+	    data1.elementType = elementType;
+	    data1.pickedPieceRow = pickedPieceRow;
+	    data1.pickedPieceColumn = pickedPieceColumn;
+
+	    to = DropPieceColumn + DropPieceRow;
+	    frm = pickedPieceColumn + pickedPieceRow;
+
+	    var string = JSON.stringify(data1);
+	     socket.emit('record data', string);
+
+
+
+
+       // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	}
+
+	$(document).on('click', '.imgClass', function () {
+	    moveFrom = $(this).attr('id');
+	    //alert(moveFrom + "     1");
+   $(".divHover").remove();
+	    socket.emit('highlightMoves', $(this).parent().attr('id'), $(this).attr('id'));
+	});
+
+
+	socket.on('highlightMoves', function (validMoves,imgId) {	  
+	    $.each(validMoves, function (key, value) {
+	        var did = "d" + value;
+	        var str = '<div id="' + did + '" class="divHover" style="height:50px;width:50px;background-color:#7DD9E9;opacity:0.8;-webkit-box-shadow: inset 1px 1px 15px 3px rgba(0,0,0,0.75);';
+	        str = str + ' -moz-box-shadow: inset 1px 1px  15px 3px rgba(0,0,0,0.75);box-shadow: inset 1px 1px  15px 3px rgba(0,0,0,0.75); float: left; position: absolute;left: 1px;top: 1px;"></div>';
+	        $("#" + value).append(str);
+	    });
+	});
+
+
+	$(document).on('click', '.divHover', function () {
+
+	  
+
+	    dropPlayer = '';
+	    dropPlayerfullnm = '';
+	    data = moveFrom;
+	    piecepicked = data.substring(1, 2);
+	    whichplayer = data.substring(0, 1);
+	    pickpiecefrom = $("#" + data).parent().attr("id");
+	    placepieceat = $(this).attr('id');//ev.target.id;
+	    elementType = $("#" + placepieceat).prop('tagName');
+	    pickedPieceRow = pickpiecefrom.substring(1, pickpiecefrom.length);
+	    pickedPieceColumn = pickpiecefrom.substring(0, 1);
+	    moveTowards = "";
+
+	    //alert(activeplayer + "-------" + whichplayer);
+
+
+	    if (activeplayer == whichplayer) {
+	        if (elementType == 'TD') {
+	            DropPieceRow = placepieceat.substring(1, placepieceat.length);
+	            DropPieceColumn = placepieceat.substring(0, 1);
+	            dropat = DropPieceColumn + DropPieceRow;
+	        }
+	        else if (elementType == "IMG") {
+	            dropPlayer = placepieceat.substring(0, 1);
+	            dropPlayerfullnm = placepieceat;
+	            placepieceat = $("#" + placepieceat).parent().attr("id");
+	            DropPieceRow = placepieceat.substring(1, placepieceat.length);
+	            DropPieceColumn = placepieceat.substring(0, 1);
+
+	        }
+	        else if (elementType == "DIV") {
+
+	            placepieceat = placepieceat.substring(1, placepieceat.length);
+	            DropPieceRow = placepieceat.substring(1, placepieceat.length);
+	            DropPieceColumn = placepieceat.substring(0, 1);
+	            dropat = DropPieceColumn + DropPieceRow;
+	            dropPlayer = $("#" + placepieceat).children().attr("id").substring(0, 1);
+	            dropPlayerfullnm = $("#" + placepieceat).children().attr("id");
+
+	        }
+
+	        // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+	        var data1 = {};
+	        data1.data = data;
+	        data1.DropPieceRow = DropPieceRow;
+	        data1.DropPieceColumn = DropPieceColumn;
+	        data1.dropPlayer = dropPlayer;
+	        data1.dropPlayerfullnm = dropPlayerfullnm;
+	        data1.piecepicked = piecepicked;
+	        data1.whichplayer = whichplayer;
+	        data1.pickpiecefrom = pickpiecefrom;
+	        data1.placepieceat = $("#" + placepieceat).parent().attr("id");;
+	        data1.elementType = elementType;
+	        data1.pickedPieceRow = pickedPieceRow;
+	        data1.pickedPieceColumn = pickedPieceColumn;
+
+	        to = DropPieceColumn + DropPieceRow;
+	        frm = pickedPieceColumn + pickedPieceRow;
+
+	        var string = JSON.stringify(data1);
+
+	        //alert(string);
+
+	        socket.emit('record data', string);
+
+	    }
+
+	   
+
+	});
+
+	/*chat*/
+	</script>
+	 
+    <div style="position:fixed;top:1%;">
+      
+        <table>
+            <tr>
+                <td>
+                    <div id="showboard"></div>
+                </td>
+                <td>
+                    <span id="msg" style="position: fixed; left: 59%; top: 2%; z-index: 100;"></span>
+
+                    <span id="wthdrwmoves" style="position: fixed; left: 59%; top: 4%;display:none;"></span>
+
+                    <div style="position: fixed; left: 2.5%; top: -2.5%; z-index: 100;">
+                          
+                    </div>
+
+                </td>
+                    </tr>
+        </table>
+        
+    </div>
+   
+</body>
+</html>
+

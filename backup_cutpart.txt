@@ -1,0 +1,348 @@
+//var colarray = {
+        //    pieces: []
+        //};
+
+        //var plyr = msg;
+        ////imgids,imgs
+        //if (plyr == "ShowBoard") {
+        //    var col = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"];
+        //    var cnt = 12;
+        //    for (var i = 0; i < 12; i++) {
+        //        for (var j = 0; j < 12; j++) {
+        //            colarray.pieces.push({
+        //                "colid": col[j] + cnt,
+        //                "imgids": '',
+        //                "imgs": ''
+        //            });
+        //        }
+        //        cnt--;
+        //    }
+
+           
+        //    var stringjson = JSON.stringify(colarray);
+        //    var htmlstr = stringjson;
+        //    htmlstr += "$$BlankBoard";
+        //    io.emit('record data', htmlstr);
+
+
+        //}
+        //else if (plyr == "Player1") {
+
+        //    console.log(plyr +" logged in...");
+
+        //    var col = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"];
+        //    var cnt = 12;
+
+
+        //    var colids = ["c2", "d2", "e2", "f2", "g2", "h2", "i2", "j2", "c1", "j1", "d1", "i1", "e1","h1", "f1", "g1"];
+        //    var imgids = ["wP1", "wP2", "wP3", "wP4", "wP5", "wP6", "wP7", "wP8", "wR1", "wR2", "wN1", "wN2", "wB1", "wB2", "wQ", "wK"];
+        //    var imgs = ["wP.png", "wR.png", "wN.png", "wB.png", "wQ.png", "wK.png"];
+
+        //    var cnt1 = 144;
+        //    var i = 0;
+        //    var j = 0;
+
+        //    for (var i = 0; i < 12; i++) {
+        //        for (var j = 0; j < 12; j++) {
+        //            var a = col[j] + cnt;
+        //            if (colids.indexOf(a) == -1) {
+        //                colarray.pieces.push({
+        //                    "colid": a,
+        //                    "imgids": '',
+        //                    "imgs": ''
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) >= 0 && colids.indexOf(a) < 8) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[0]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 8 || colids.indexOf(a) == 9) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[1]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 10 || colids.indexOf(a) == 11) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[2]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 12 || colids.indexOf(a) == 13) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[3]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 14) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[4]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 15) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[5]
+        //                });
+        //            }
+        //        }
+        //        cnt--;
+        //    }
+
+            
+        //    var stringjson = JSON.stringify(colarray);
+        //    var htmlstr = stringjson;
+        //    htmlstr += "$$Player1";
+        //    io.emit('record data', htmlstr);
+
+
+        //}
+        //else if (plyr == "Player2") {
+
+        //    console.log(plyr + " logged in...");
+
+        //    var col = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"];
+        //    var cnt = 12;
+
+        //    var colids = ["b3","b4","b5","b6","b7","b8","b9","b10","a3","a10","a4","a9","a5","a8","a6","a7"];
+        //    var imgids = ["gP1", "gP2", "gP3", "gP4", "gP5", "gP6", "gP7", "gP8", "gR1", "gR2", "gN1", "gN2", "gB1", "gB2", "gQ", "gK"];
+        //    var imgs = ["GPawn.png","GRook.png", "GKnight.png", "GBishop.png", "GQueen.png", "GKing.png"];
+
+        //    var cnt1 = 144;
+        //    var i = 0;
+        //    var j = 0;
+
+        //    for (var i = 0; i < 12; i++) {
+        //        for (var j = 0; j < 12; j++) {
+        //            var a = col[j] + cnt;
+        //            if (colids.indexOf(a) == -1) {
+        //                colarray.pieces.push({
+        //                    "colid": a,
+        //                    "imgids": '',
+        //                    "imgs": ''
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) >= 0 && colids.indexOf(a) < 8) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[0]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 8 || colids.indexOf(a) == 9) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[1]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 10 || colids.indexOf(a) == 11) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[2]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 12 || colids.indexOf(a) == 13) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[3]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 14) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[4]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 15) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[5]
+        //                });
+        //            }
+        //        }
+        //        cnt--;
+        //    }
+        //    //imgids,imgs
+
+        //    var stringjson = JSON.stringify(colarray);
+        //    var htmlstr = stringjson;
+        //    htmlstr += "$$Player2";
+        //    io.emit('record data', htmlstr);
+
+
+        //}
+        //else if (plyr == "Player3") {
+
+        //    console.log(plyr + " logged in...");
+
+        //    var col = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"];
+        //    var cnt = 12;
+
+        //    var colids = ["c11", "d11", "e11", "f11", "g11", "h11", "i11", "j11", "c12", "j12", "d12", "i12", "e12", "h12", "f12", "g12"];
+        //    var imgids = ["bP1", "bP2", "bP3", "bP4", "bP5", "bP6", "bP7", "bP8", "bR1", "bR2", "bN1", "bN2", "bB1", "bB2", "bQ", "bK"];
+        //    var imgs = ["bP.png", "bR.png", "bN.png", "bB.png", "bQ.png", "bK.png"];
+
+        //    var cnt1 = 144;
+        //    var i = 0;
+        //    var j = 0;
+
+        //    for (var i = 0; i < 12; i++) {
+        //        for (var j = 0; j < 12; j++) {
+        //            var a = col[j] + cnt;
+        //            if (colids.indexOf(a) == -1) {
+        //                colarray.pieces.push({
+        //                    "colid": a,
+        //                    "imgids": '',
+        //                    "imgs": ''
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) >= 0 && colids.indexOf(a) < 8) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[0]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 8 || colids.indexOf(a) == 9) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[1]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 10 || colids.indexOf(a) == 11) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[2]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 12 || colids.indexOf(a) == 13) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[3]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 14) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[4]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 15) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[5]
+        //                });
+        //            }
+        //        }
+        //        cnt--;
+        //    }
+
+
+        //    var stringjson = JSON.stringify(colarray);
+        //    var htmlstr = stringjson;
+        //    htmlstr += "$$Player3";
+        //    io.emit('record data', htmlstr);
+
+
+        //}
+        //else if (plyr == "Player4") {
+
+        //    console.log(plyr + " logged in...");
+
+        //    var col = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"];
+        //    var cnt = 12;
+
+
+
+        //    var colids = ["k3", "k4", "k5", "k6", "k7", "k8", "k9", "k10", "l3", "l10", "l4", "l9", "l5", "l8", "l6", "l7"];
+        //    var imgids = ["rP1", "rP2", "rP3", "rP4", "rP5", "rP6", "rP7", "rP8", "rR1", "rR2", "rN1", "rN2", "rB1", "rB2", "rQ", "rK"];
+        //    var imgs = ["rPawn.png", "rRook.png", "rKnight.png", "rBishop.png", "rQueen.png", "rKing.png"];
+
+        //    var cnt1 = 144;
+        //    var i = 0;
+        //    var j = 0;
+
+        //    for (var i = 0; i < 12; i++) {
+        //        for (var j = 0; j < 12; j++) {
+        //            var a = col[j] + cnt;
+        //            if (colids.indexOf(a) == -1) {
+        //                colarray.pieces.push({
+        //                    "colid": a,
+        //                    "imgids": '',
+        //                    "imgs": ''
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) >= 0 && colids.indexOf(a) < 8) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[0]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 8 || colids.indexOf(a) == 9) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[1]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 10 || colids.indexOf(a) == 11) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[2]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 12 || colids.indexOf(a) == 13) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[3]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 14) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[4]
+        //                });
+        //            }
+        //            else if (colids.indexOf(a) == 15) {
+        //                colarray.pieces.push({
+        //                    "colid": colids[colids.indexOf(a)],
+        //                    "imgids": imgids[colids.indexOf(a)],
+        //                    "imgs": imgs[5]
+        //                });
+        //            }
+        //        }
+        //        cnt--;
+        //    }
+
+
+        //    var stringjson = JSON.stringify(colarray);
+        //    var htmlstr = stringjson;
+        //    htmlstr += "$$Player3";
+        //    io.emit('record data', htmlstr);
+
+
+        //}
+        //else {
